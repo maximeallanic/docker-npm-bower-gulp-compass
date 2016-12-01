@@ -1,0 +1,3 @@
+deploy:
+  script:
+    - docker build -t Redkeet/$(echo $CI_PROJECT_NAME | sed -e 's/^docker-//g'):$(if [ '$CI_BUILD_REF_NAME' = 'master']; then echo 'latest'; else echo $CI_BUILD_REF_NAME; fi) .
