@@ -1,4 +1,4 @@
-#image: docker:latest
+image: elasticsuite/docker-build-server
 
 deploy:
   script:
