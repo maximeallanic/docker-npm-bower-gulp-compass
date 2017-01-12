@@ -1,5 +1,5 @@
 build:
-  image: docker:git
+  image: docker:latest
   services:
     - docker:dind
   script:
