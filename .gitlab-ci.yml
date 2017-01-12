@@ -1,7 +1,12 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+before_script:
+  - docker info
+
 build:
-  image: docker:latest
-  services:
-    - docker:dind
   script:
     - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
     - docker build -t redkeet/$(echo $CI_PROJECT_NAME | sed -e 's/^docker-//g'):$(if [ $CI_BUILD_REF_NAME = 'master' ]; then echo 'latest'; else echo $CI_BUILD_REF_NAME; fi) .
