@@ -20,7 +20,8 @@ RUN apt-get install -y\
   bash \
   python \
   file \
-  nasm
+  nasm \
+  default-jdk
 
 RUN npm install -g bower gulp-cli
 
