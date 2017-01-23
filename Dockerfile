@@ -23,12 +23,15 @@ RUN apt-get install -y\
   nasm \
   default-jdk
 
-RUN npm install -g bower gulp-cli
+RUN npm install -g bower gulp-cli protractor
+RUN webdriver-manager update
 
 RUN mkdir /var/www
 RUN useradd -ms /bin/bash node
 RUN chown node:node /var/www
 
 USER node
+
+ENV DBUS_SESSION_BUS_ADDRESS=/dev/null
 
 WORKDIR /var/www
