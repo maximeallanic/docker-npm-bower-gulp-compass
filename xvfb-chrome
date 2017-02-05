@@ -47,13 +47,8 @@ exec 2> >(exec cat >&2)
 
 
 Xvfb $DISPLAY -screen 0 1920x1080x24 -ac -r -cc 4 -accessx -xinerama +extension Composite +extension RANDR +extension GLX -nolisten tcp &
-
+xvfb=$!
 # Make sure that the profile directory specified in the environment, if any,
 # overrides the default.
-if [[ -n "$CHROME_USER_DATA_DIR" ]]; then
-  # Note: exec -a below is a bashism.
-  exec -a "$0" "$HERE/chrome"  \
-    --user-data-dir="$CHROME_USER_DATA_DIR" --no-first-run --no-sandbox --start-maximized "$@"
-else
-  exec -a "$0" "$HERE/chrome" --no-first-run --no-sandbox --start-maximized "$@"
-fi
+"$HERE/chrome" --no-first-run --no-sandbox --start-maximized "$@"
+kill $xvfb
