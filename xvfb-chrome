@@ -45,10 +45,19 @@ exec < /dev/null
 exec > >(exec cat)
 exec 2> >(exec cat >&2)
 
+_kill_procs() {
+    kill -TERM $chrome
+    wait $chrome
+    kill -TERM $xvfb
+}
+
+# Setup a trap to catch SIGTERM and relay it to child processes
+trap _kill_procs SIGHUP SIGINT SIGTERM
 
 Xvfb $DISPLAY -screen 0 1920x1080x24 -ac -r -cc 4 -accessx -xinerama +extension Composite +extension RANDR +extension GLX -nolisten tcp &
 xvfb=$!
-# Make sure that the profile directory specified in the environment, if any,
-# overrides the default.
-"$HERE/chrome" --no-first-run --no-sandbox --start-maximized "$@"
-kill $xvfb
+"$HERE/chrome" --no-first-run --start-maximized --disable-gpu --disable-impl-side-painting --disable-gpu-sandbox --disable-accelerated-2d-canvas --disable-accelerated-jpeg-decoding --no-sandbox --test-type=ui "$@" &
+chrome=$!
+
+wait $chrome
+wait $xvfb
