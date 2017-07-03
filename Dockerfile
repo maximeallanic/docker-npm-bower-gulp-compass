@@ -3,7 +3,7 @@ FROM debian:jessie
 ENV IN_CONTAINER=true
 
 RUN apt-get update
-RUN apt-get upgrade
+RUN apt-get upgrade -y
 RUN apt-get install wget curl bash apt-utils -y
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
 RUN sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
@@ -51,6 +51,9 @@ ENV DISPLAY=:10
 RUN mkdir /var/www
 RUN useradd -ms /bin/bash node -G sudo -u 1000 -g 100
 RUN chown node /var/www
+
+RUN curl -o /usr/local/bin/ecs-cli https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-latest
+RUN chmod +x /usr/local/bin/ecs-cli
 
 USER node
 
