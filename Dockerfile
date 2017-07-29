@@ -1,6 +1,6 @@
 FROM debian:jessie
 
-ENV IN_CONTAINER=true
+ENV CONTAINER=1
 
 RUN apt-get update
 RUN apt-get upgrade -y
@@ -43,6 +43,7 @@ RUN apt-get install -y\
 
 RUN npm install -g bower gulp-cli protractor
 
+# Add chrome xvfb to make e2e testt
 ADD xvfb-chrome /opt/google/chrome/google-chrome
 RUN chmod +x /opt/google/chrome/google-chrome
 
@@ -52,6 +53,7 @@ RUN mkdir /var/www
 RUN useradd -ms /bin/bash node -G sudo -u 1000 -g 100
 RUN chown node /var/www
 
+# Add ecs-cli to deploy container to AWS
 RUN curl -o /usr/local/bin/ecs-cli https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-latest
 RUN chmod +x /usr/local/bin/ecs-cli
 
