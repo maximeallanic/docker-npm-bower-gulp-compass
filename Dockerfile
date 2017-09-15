@@ -48,6 +48,7 @@ ENV PATH $PATH:/usr/lib/jvm/java-1.8-openjdk/jre/bin:/usr/lib/jvm/java-1.8-openj
 # Prepare Workdir
 RUN mkdir /var/www
 RUN chown node:node /var/www
+RUN echo "node ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # Install npm dependencies
 RUN npm install -g bower gulp-cli protractor

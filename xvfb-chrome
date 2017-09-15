@@ -50,9 +50,9 @@ _kill_procs() {
     kill -TERM $xvfb
 }
 
-[ ! -e /var/run/dbus ] && mkdir /var/run/dbus
+[ ! -e /var/run/dbus ] && sudo mkdir /var/run/dbus
 
-/usr/bin/dbus-daemon --system
+sudo /usr/bin/dbus-daemon --system
 
 # Setup a trap to catch SIGTERM and relay it to child processes
 trap _kill_procs SIGHUP SIGINT SIGTERM SIGILL SIGTRAP SIGKILL SIGQUIT
