@@ -50,12 +50,17 @@ _kill_procs() {
     kill -TERM $xvfb
 }
 
+[ ! -e /var/run/dbus ] && mkdir /var/run/dbus
+
+/usr/bin/dbus-daemon --system
+
 # Setup a trap to catch SIGTERM and relay it to child processes
 trap _kill_procs SIGHUP SIGINT SIGTERM SIGILL SIGTRAP SIGKILL SIGQUIT
 
 Xvfb $DISPLAY -screen 0 1920x1080x24 -ac -r -cc 4 -accessx -xinerama +extension Composite +extension RANDR +extension GLX -nolisten tcp &
 xvfb=$!
-"$HERE/chrome" --no-first-run --start-maximized --disable-gpu --disable-impl-side-painting --disable-gpu-sandbox --disable-accelerated-2d-canvas --disable-accelerated-jpeg-decoding --no-sandbox --test-type=ui "$@" &
+
+/usr/bin/chromium-browser --no-first-run --start-maximized --disable-gpu --disable-impl-side-painting --disable-gpu-sandbox --disable-accelerated-2d-canvas --disable-accelerated-jpeg-decoding --no-sandbox --test-type=ui "$@" &
 chrome=$!
 
 wait $chrome
