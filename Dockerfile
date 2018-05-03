@@ -23,10 +23,9 @@ RUN apk add \
   perl \
   libffi-dev \
   bash \
-  python \
+  python2 \
   file \
   nasm \
-  openjdk8 \
   libsass \
   xvfb \
   imagemagick \
@@ -41,9 +40,15 @@ RUN apk add \
   ttf-freefont \
   mesa-dri-swrast
 
-# Set java path
-ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk
-ENV PATH $PATH:/usr/lib/jvm/java-1.8-openjdk/jre/bin:/usr/lib/jvm/java-1.8-openjdk/bin
+# Java
+RUN \
+  curl -jkL -H "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jre-8u131-linux-x64.tar.gz -o /opt/jre-8u131-linux-x64.tar.gz \
+  && tar -xzf /opt/jre-8u131-linux-x64.tar.gz -C /opt \
+  && rm /opt/jre-8u131-linux-x64.tar.gz \
+  && ln -s /opt/jre-8u131-linux-x64.tar.gz /opt/jdk
+ENV PATH $PATH:/opt/jdk/bin
+ENV JAVA_HOME /opt/jdk
+ENV _JAVA_OPTIONS -Djava.net.preferIPv4Stack=true
 
 # Prepare Workdir
 RUN mkdir /var/www
