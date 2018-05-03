@@ -42,10 +42,10 @@ RUN apk add \
 
 # Java
 RUN \
-  curl -jkL -H "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jre-8u131-linux-x64.tar.gz -o /opt/jre-8u131-linux-x64.tar.gz \
-  && tar -xzf /opt/jre-8u131-linux-x64.tar.gz -C /opt \
-  && rm /opt/jre-8u131-linux-x64.tar.gz \
-  && ln -s /opt/jre-8u131-linux-x64.tar.gz /opt/jdk
+  curl -jkL -H "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/jdk-8u171-linux-x64.tar.gz -o /opt/jdk-8u171-linux-x64.tar.gz \
+  && tar -xzf /opt/jdk-8u171-linux-x64.tar.gz -C /opt \
+  && rm /opt/jdk-8u171-linux-x64.tar.gz \
+  && ln -s /opt/jdk1.8.0_171 /opt/jdk
 ENV PATH $PATH:/opt/jdk/bin
 ENV JAVA_HOME /opt/jdk
 ENV _JAVA_OPTIONS -Djava.net.preferIPv4Stack=true
