@@ -1,6 +1,6 @@
-FROM node:alpine
+FROM alpine:edge
 
-# Set env to detect if there in a container, or not
+# Set env to detect if we are in a container, or not
 ENV CONTAINER=1
 
 USER root
@@ -12,10 +12,13 @@ RUN apk add \
   wget \
   bash \
   chromium \
+  chromium-chromedriver \
   curl \
   git \
   wget \
   autoconf \
+  nodejs \
+  nodejs-npm \
   automake \
   sudo \
   g++ \
@@ -28,42 +31,35 @@ RUN apk add \
   nasm \
   libsass \
   xvfb \
+  libx11 \
+  randrproto \
+  xineramaproto \
   imagemagick \
   libjpeg-turbo-utils \
   gifsicle \
   optipng \
   udev \
+  libc6-compat \
   zlib-dev \
   wait4ports \
   xorg-server \
   dbus \
   ttf-freefont \
-  mesa-dri-swrast
+  mesa-dri-swrast \
+  openjdk8
 
-# Java
-RUN \
-  curl -jkL -H "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/jdk-8u171-linux-x64.tar.gz -o /opt/jdk-8u171-linux-x64.tar.gz \
-  && tar -xzf /opt/jdk-8u171-linux-x64.tar.gz -C /opt \
-  && rm /opt/jdk-8u171-linux-x64.tar.gz \
-  && ln -s /opt/jdk1.8.0_171 /opt/jdk
-ENV PATH $PATH:/opt/jdk/bin
-ENV JAVA_HOME /opt/jdk
-ENV _JAVA_OPTIONS -Djava.net.preferIPv4Stack=true
+ENV JAVA_HOME $(dirname "$(readlink -f "$(which javac || which java)")")
 
 # Prepare Workdir
+RUN addgroup node
+RUN adduser -S node
 RUN mkdir /var/www
 RUN chown node:node /var/www
 RUN echo "node ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+RUN chmod 777 -R /var/log/
 
 # Install npm dependencies
 RUN npm install -g bower gulp-cli protractor
-
-# Add chrome xvfb to make e2e test
-ADD xvfb-chrome /usr/bin/xvfb-chromium
-RUN ln -s /usr/bin/xvfb-chromium /usr/bin/google-chrome
-RUN chmod +x /usr/bin/xvfb-chromium
-ENV CHROME_BIN=/usr/bin/xvfb-chromium
-ENV DISPLAY=:10
 
 USER node
 
